@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Form{% endblock %}
+{% load static %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<h1>학생 정보 수집 중입니다 ...</h1>
+<p>학번과 이름을 입력해주세요</p>
+<form action="" method="get">
+    <input type="text" name="get"><br>
+    <input type="text" name="get"><br>
+    <input type="submit" value="학번 및 이름 입력">
+</form>
+{% endblock %}
