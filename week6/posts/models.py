@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.conf import settings
 # Create your models here.
 
 User = get_user_model()
@@ -17,3 +17,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(verbose_name='작성일', auto_now_add=True)
     post = models.ForeignKey(to='Post', on_delete=models.CASCADE, verbose_name='게시글')
     writer = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='작성자', null=True)
+
+class Posts(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
