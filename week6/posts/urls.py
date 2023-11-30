@@ -1,8 +1,16 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
+from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import post_list_view, post_create_form_view
 from .views import post_delete_view, post_detail_view, post_update_view
+from rest_framework import routers
+from posts.views import PostModelViewSet
+#,calculator, CaculatorAPI
+
+router = routers.DefaultRouter()
+router.register('posts',PostModelViewSet)
+#router.register('comments',CommentModelViewSet)
 
 app_name = 'posts'
 
@@ -17,6 +25,8 @@ app_name = 'posts'
 urlpatterns = [
     path('posts/',views.PostBase.as_view()),
     path('posts/<int:pk>',views.PostDetail.as_view()),
+    path('',include(router.urls)),
+    path('admin/',admin.site.urls),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+#urlpatterns = format_suffix_patterns(urlpatterns)
