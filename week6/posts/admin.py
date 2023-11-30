@@ -3,7 +3,7 @@ from posts.models import Post, Comment
 
 # Register your models here.
 # admin.site.register(Post)
-admin.site.register(Comment)
+#admin.site.register(Comment)
 
 class CommentInline(admin.TabularInline):
     model = Comment
@@ -29,3 +29,7 @@ class PostModelAdmin(admin.ModelAdmin):
         for item in queryset:
             item.content = '운영규칙 위반으로 인한 게시글 삭제 처리'
             item.save()
+
+@admin.register(Comment)
+class CommentModelAdmin(admin.ModelAdmin):
+    pass

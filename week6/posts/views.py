@@ -7,10 +7,12 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import status
 from django.http import Http404
-from .serializers import PostModelSerializer
+from .serializers import PostModelSerializer,PostListModelSerializer,CommentHyperlinkModelSerializer,PostRetrieveSerializer
+from rest_framework import generics
 from django.views.generic import ListView
-from .models import Posts,Post
+from .models import Posts,Post,Comment
 from django.contrib.auth.decorators import login_required
+from rest_framework.generics import DestroyAPIView
 def index(request):
     post_list = Post.objects.all().order_by('-created_at')
     context = {
@@ -104,7 +106,10 @@ def post_create_form_view(request):
 class PostModelViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostModelSerializer
-
+class CommentModelViewSet(ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = PostListModelSerializer
+    
 class PostBase(APIView):
     def get(self, request, format=None):
         queryset = Post.objects.all()
@@ -143,6 +148,22 @@ class PostDetail(APIView):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
  
+class PostListCreateView(generics.ListAPIView, generics.CreateAPIView):
+    queryset=Post.objects.all()
+    serializer_class=PostModelSerializer
+
+    def post(self,request,*args,**kwargs):
+        return self.create(request,*args,**kwargs)
+    def create(self,request,*args,**kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serilaizer.save()
+        headers=self.get_success_headers(serializer.data)
+        return Response(serializer.data,status=status.HTTP_201_CREATED,headers=headers)
+
+class PostRetrieUpdateView(generics.RetrieveAPIView,generics.UpdateAPIView,generics.DestroyAPIView):
+    queryset=Post.objects.all()
+    serializer_class=PostRetrieveSerializer
 
 
 
